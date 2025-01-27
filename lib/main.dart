@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:teste/screens/login.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:teste/services/roteador.dart';
 import 'firebase_options.dart';
 
 Future <void> main() async {
@@ -18,7 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: Login(),
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: RoteadorTelas(),
     );
   }
 }

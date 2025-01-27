@@ -44,7 +44,6 @@ class Login extends StatelessWidget {
                     ),
                     TextField(
                       controller: _emailController,
-                      obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'Email',
