@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:teste/components/botao.dart';
 import 'package:teste/screens/register.dart';
 
 class Login extends StatelessWidget {
@@ -6,8 +7,6 @@ class Login extends StatelessWidget {
 
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
-
-  
 
   @override
   Widget build(BuildContext context) {
@@ -59,16 +58,35 @@ class Login extends StatelessWidget {
                         labelText: 'senha',
                       ),
                     ),
-                    SizedBox(height: 20,),
-                    ElevatedButton
-                    (child: Text('Entrar'),
-                      onPressed: (){}),
-                      SizedBox(height: 20,),
-                    TextButton.icon(onPressed: (){}, label: Text('Entrar com Google'), icon: Icon(Icons.login),),
-                    SizedBox(height: 20,),
-                    TextButton.icon(onPressed: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
-                    }, label: Text('Criar conta'), icon: Icon(Icons.app_registration),),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Botao(
+                      text: 'Entrar',
+                      onPressed: () {},
+                      width: double.infinity,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextButton.icon(
+                      onPressed: () {},
+                      label: Text('Entrar com Google'),
+                      icon: Icon(Icons.login),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextButton.icon(
+                      onPressed: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Register()));
+                      },
+                      label: Text('Criar conta'),
+                      icon: Icon(Icons.app_registration),
+                    ),
                   ],
                 ),
               )
