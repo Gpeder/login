@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:teste/components/botao.dart';
+import 'package:teste/components/reset_modal.dart';
 import 'package:teste/screens/register.dart';
 import 'package:teste/services/auth_services.dart';
 
@@ -44,8 +48,12 @@ class _LoginState extends State<Login> {
                 ),
                 child: Column(
                   children: [
-                    FlutterLogo(size: 100,),
-                    SizedBox(height: 20,),
+                    FlutterLogo(
+                      size: 100,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -53,7 +61,9 @@ class _LoginState extends State<Login> {
                         labelText: 'Email',
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     TextField(
                       controller: _senhaController,
                       obscureText: true,
@@ -62,7 +72,9 @@ class _LoginState extends State<Login> {
                         labelText: 'senha',
                       ),
                     ),
-                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 20,
+                    ),
                     Botao(
                       text: 'Entrar',
                       width: double.infinity,
@@ -82,11 +94,14 @@ class _LoginState extends State<Login> {
                     ),
                     SizedBox(height: 20,),
                     TextButton.icon(
-                      label: Text('Entrar com Google'),
-                      icon: Icon(Icons.login),
-                      onPressed: () {},
+                      label: const Text('Login com Google'),
+                      icon: const FaIcon(
+                        FontAwesomeIcons.google,
+                      ),
+                      onPressed: () {
+                        loginGoogle();
+                      },
                     ),
-                    SizedBox(height: 20,),
                     TextButton.icon(
                       onPressed: () {
                         Navigator.push(
@@ -97,6 +112,14 @@ class _LoginState extends State<Login> {
                       label: Text('Criar conta'),
                       icon: Icon(Icons.app_registration),
                     ),
+                    TextButton(
+                      child: Text('Esqueci minha senha'),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => ResetModal());
+                      },
+                    )
                   ],
                 ),
               )
@@ -106,4 +129,23 @@ class _LoginState extends State<Login> {
       ),
     );
   }
+}
+
+
+Future<UserCredential> loginGoogle() async {
+  final GoogleSignIn googleSignIn = GoogleSignIn();
+  final GoogleSignInAccount? googleUser = await googleSignIn.signIn();
+
+  if (googleUser == null) {
+    throw FirebaseAuthException(
+      code: 'ERROR_ABORTED_BY_USER',
+      message: 'Login cancelado pelo usuário',
+    );
+  }
+  final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+  final credential = GoogleAuthProvider.credential(
+    accessToken: googleAuth.accessToken,
+    idToken: googleAuth.idToken,
+  );
+  return await FirebaseAuth.instance.signInWithCredential(credential);
 }

@@ -18,6 +18,10 @@ class Register extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.white),
+        backgroundColor: Color(0xff1976D2),
+      ),
         body: Container(
             padding: EdgeInsets.all(20),
             decoration: BoxDecoration(
