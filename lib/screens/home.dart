@@ -7,6 +7,7 @@ import 'package:teste/components/custom_textfield.dart';
 import 'package:teste/components/menu.dart';
 import 'package:teste/helpers/hours_helpers.dart';
 import 'package:teste/models/hour.dart';
+import 'package:uuid/uuid.dart';
 
 class HomeScreen extends StatefulWidget {
   final User user;
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    refresh();
   }
 
   @override
@@ -57,12 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
                   key: ValueKey<Hour>(model),
                   direction: DismissDirection.endToStart,
                   background: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.redAccent,
+                    ),
                     alignment: Alignment.centerRight,
                     padding: EdgeInsets.only(left: 10),
-                    color: Colors.redAccent,
-                    child: Icon(
-                      Icons.delete,
-                      color: Colors.white,
+                    child: Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: Icon(
+                        Icons.delete,
+                        size: 30,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   onDismissed: (direction) {
@@ -73,7 +82,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Column(
                       children: [
                         ListTile(
-                          onLongPress: () {},
+                          onLongPress: () {
+                            showFormModal(model: model);
+                          },
                           onTap: () => {},
                           leading: Icon(
                             Icons.list_alt_rounded,
@@ -149,7 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
               keyboardType: TextInputType.text,
               hintText: 'Lembrete do que você fez!',
               labelText: 'Descrição',
-              mask: minutosMaskFormatter,
+              mask: null,
+            
             ),
             SizedBox(height: 20),
             Row(
@@ -165,7 +177,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   text: confirmaButton,
                   width: 80,
                   onPressed: () {
-
+                    Hour hour = Hour(
+                      id: const Uuid().v1(),
+                      date: dateController.text,
+                      minutos: HoursHelpers.hoursToMinutos(minutosController.text),
+                      descricao: descricaoController.text,
+                      );
+                      if (descricaoController.text != '') {
+                        hour.descricao = descricaoController.text;
+                      }
+                      if (model != null) {
+                        hour.id = model.id;
+                      }
+                      firestore.collection(widget.user.uid).add(hour.toMap());
+                      refresh();
+                      Navigator.pop(context);
                   }
                   ),
               ],
@@ -176,5 +202,18 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void remove(Hour model) {}
+  void remove(Hour model) => firestore.collection(widget.user.uid).doc(model.id).delete();  
+  
+  Future<void> refresh() async {
+    List<Hour> temp = [];
+
+
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore.collection(widget.user.uid).get();
+    for (var doc in snapshot.docs) {
+      temp.add(Hour.fromMap(doc.data()));
+    }
+    setState(() {
+      listHours = temp;
+    });
+  }
 }

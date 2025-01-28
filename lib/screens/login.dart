@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:teste/components/botao.dart';
 import 'package:teste/screens/register.dart';
+import 'package:teste/services/auth_services.dart';
 
-class Login extends StatelessWidget {
-  Login({super.key});
+class Login extends StatefulWidget {
+  const Login({super.key});
 
+  @override
+  State<Login> createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _senhaController = TextEditingController();
+
+  AuthServices authServices = AuthServices();
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +44,8 @@ class Login extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    FlutterLogo(
-                      size: 100,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    FlutterLogo(size: 100,),
+                    SizedBox(height: 20,),
                     TextField(
                       controller: _emailController,
                       decoration: InputDecoration(
@@ -48,35 +53,40 @@ class Login extends StatelessWidget {
                         labelText: 'Email',
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20,),
                     TextField(
                       controller: _senhaController,
+                      obscureText: true,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(),
                         labelText: 'senha',
                       ),
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20,),
                     Botao(
                       text: 'Entrar',
-                      onPressed: () {},
                       width: double.infinity,
+                      onPressed: () async {
+                        String? erro = await authServices.entraUsuario(
+                          email: _emailController.text,
+                          senha: _senhaController.text,
+                        );
+                        if (erro != null) {
+                          final snackBar = SnackBar(
+                            content: Text(erro),
+                            backgroundColor: Colors.red,
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        }
+                      },
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20,),
                     TextButton.icon(
-                      onPressed: () {},
                       label: Text('Entrar com Google'),
                       icon: Icon(Icons.login),
+                      onPressed: () {},
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
+                    SizedBox(height: 20,),
                     TextButton.icon(
                       onPressed: () {
                         Navigator.push(

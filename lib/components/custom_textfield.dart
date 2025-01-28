@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-
 class CustomTextFormField extends StatelessWidget {
-
   final bool obscureText;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final String hintText;
   final String labelText;
-  final MaskTextInputFormatter mask;
+  final MaskTextInputFormatter? mask; 
 
   const CustomTextFormField({
     super.key,
@@ -17,7 +15,8 @@ class CustomTextFormField extends StatelessWidget {
     required this.controller,
     required this.keyboardType,
     required this.hintText,
-    required this.labelText, required this.mask,
+    required this.labelText,
+    this.mask, // Agora é opcional
   });
 
   @override
@@ -33,7 +32,7 @@ class CustomTextFormField extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
         ),
       ),
-      inputFormatters: [mask],
+      inputFormatters: mask != null ? [mask!] : [],
     );
   }
 }

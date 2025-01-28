@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
+import 'package:teste/components/botao.dart';
 import 'package:teste/services/auth_services.dart';
 
 class Register extends StatelessWidget {
@@ -40,12 +41,8 @@ class Register extends StatelessWidget {
                   ),
                   child: Column(
                     children: [
-                      FlutterLogo(
-                        size: 100,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      FlutterLogo(size: 100,),
+                      SizedBox(height: 20,),
                       TextField(
                         controller: _nomeController,
                         decoration: InputDecoration(
@@ -53,9 +50,7 @@ class Register extends StatelessWidget {
                           labelText: 'Nome',
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20,),
                       TextField(
                         controller: _mailController,
                         decoration: InputDecoration(
@@ -63,9 +58,7 @@ class Register extends StatelessWidget {
                           labelText: 'Email',
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20,),
                       TextField(
                         controller: _senhaController,
                         obscureText: true,
@@ -74,9 +67,7 @@ class Register extends StatelessWidget {
                           labelText: 'senha',
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20,),
                       TextField(
                         controller: _confirmaSenhaController,
                         obscureText: true,
@@ -85,12 +76,11 @@ class Register extends StatelessWidget {
                           labelText: 'senha',
                         ),
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      ElevatedButton(
-                          child: Text('Entrar'),
-                          onPressed: () {
+                      SizedBox(height: 20,),
+                      Botao(
+                        width: double.infinity,
+                        text: 'Cadastrar',
+                        onPressed: () {
                             if (_senhaController.text ==
                                 _confirmaSenhaController.text) {
                               authServices
@@ -118,13 +108,9 @@ class Register extends StatelessWidget {
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(snackBar);
                             }
-                          }),
-                      SizedBox(
-                        height: 20,
+                          },
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
+                      SizedBox(height: 20,),
                     ],
                   ),
                 )
